@@ -1,6 +1,6 @@
-#The developers guide to arrowhead
+# The developers guide to arrowhead
 
-##Introduction
+## Introduction
 Arrowhead is a Service-Oriented Architecture (SOA) created for efficient IoT automation. It helps you with the integration of different devices and protocols in your production, allows you to easily log and monitor important variables, and assures your production and communication operates in a secure manner. Arrowhead Framework allows you to *spend most of your time focusing on achieving your higher-level goals such as workflow optimization, quality assurance, custom production, and more*.
 
 ## Table of contents
