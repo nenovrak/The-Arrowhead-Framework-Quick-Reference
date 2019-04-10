@@ -1,12 +1,13 @@
 # The developers guide to arrowhead
 
 ## Introduction
-Arrowhead is a Service-Oriented Architecture (SOA) created for efficient IoT automation. It helps you with the integration of different devices and protocols in your production, allows you to easily log and monitor important variables, and assures your production and communication operates in a secure manner. Arrowhead Framework allows you to *spend most of your time focusing on achieving your higher-level goals such as workflow optimization, quality assurance, custom production, and more*.
+Arrowhead Framework uses a Service-Oriented Architecture (SOA) to achieve an efficient IoT automation.
+It helps you with the integration of different devices and protocols in your production, allows you to easily log and monitor important variables, and assures your production and communication operates in a secure manner. Arrowhead Framework allows you to *spend most of your time focusing on achieving your higher-level goals such as workflow optimization, quality assurance, custom production, and more*.
 
 ## Table of contents
 
 ## The Local Cloud and other Arrowhead entities
-As per the Arrowhead approach, a Service Oriented Architecture (SOA) is established in order to provide interoperability by facilitating the service interactions within closed or at least separated automation environments, called local clouds.
+As per the Arrowhead approach, a [Service](definitions/service.md) Oriented Architecture (SOA) is established in order to provide interoperability by facilitating the service interactions within closed or at least separated automation environments, called local clouds.
 
 Arrowhead Local Clouds can fulfill various tasks, and can have their own sets of appointed stakeholders (e.g. their operators or developers). These Local Clouds all have their operational boundaries, let those be functional, geographical or network-segmented. Nevertheless, each local cloud is governed through their own instances of the Arrowhead Core Systems. These are clouds in the sense that they use common resources: the Core Systems of that domain. In Arrowhead Local Clouds there can be an arbitrary number of Systems that can provide and consume Services from one another: they create and finish servicing instances dynamically in run-time.
 
