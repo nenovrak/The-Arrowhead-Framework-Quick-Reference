@@ -2,7 +2,7 @@ Service Definition
 ==================
 
 The Arrowhead Framework has a [service oriented architecture (SOA)](https://en.wikipedia.org/wiki/Service-oriented_architecture).
-Yes, it is interesting to ask people what is a service.
+Yet, it is interesting to ask people what is a service.
 
 We here consider three incarnations of a service: in real life, in memory and in messages or payloads.
 
