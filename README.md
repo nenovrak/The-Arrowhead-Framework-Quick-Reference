@@ -3,7 +3,7 @@
 ## Introduction
 The Arrowhead Framework is an embodiment of the [Industry 4.0](https://en.wikipedia.org/wiki/Industry_4.0) concepts and its associated modeled reference architecture ([RAMI 4.0](https://ec.europa.eu/futurium/en/system/files/ged/a2-schweichhart-reference_architectural_model_industrie_4.0_rami_4.0.pdf)).
 The Arrowhead Framework uses the Internet and its suite of protocols to securely connect sensors and actuators on the workshop floor to applications and enterprise systems to achieve the business's mission.
-The framework uses the concept of [services](definitions/service.md) to archives a flexible and reliable automation system with reduced complexity and engineering development time.
+The framework uses the concept of [services](definitions/service.md) to achieve a flexible and reliable automation system with reduced complexity and engineering development time.
 In other words, the framework leverages a Service-Oriented Architecture (SOA) to achieve an efficient industrial IoT automation.
 
 The Arrowhead Framework spans the complete RAMI 4.0 [solution space](https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjpqK2A5crhAhVBposKHQ0tCZQQjRx6BAgBEAU&url=https%3A%2F%2Fwww.phoenixcontact.com%2Fonline%2Fportal%2Fpc%3F1dmy%26urile%3Dwcm%3Apath%3A%2Fpcen%2Fweb%2Foffcontext%2Finsite_landing_pages%2F1323f37f-e566-4009-8645-661c715cea23%2F6ddf5dfb-dbcb-47c8-8f1a-dc915d263cd3%2F605016fb-ed97-4b22-a6fb-de1f93556226%2F605016fb-ed97-4b22-a6fb-de1f93556226&psig=AOvVaw2-oDoC3MV0eV6qW6bF5h9F&ust=1555166453717342).
