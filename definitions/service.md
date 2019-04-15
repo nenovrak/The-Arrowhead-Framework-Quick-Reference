@@ -27,5 +27,5 @@ It would also have method such as 'getTemperature()' and 'setTemperature(float t
 
 ## Exchange of services
 When prosumers provide and consume services, they do it by exchanging messages as [XML](https://en.wikipedia.org/wiki/XML) or [JSON](https://en.wikipedia.org/wiki/JSON) files in the same way one's web browser gets an [HTML](https://en.wikipedia.org/wiki/HTML) file.
-The information in these files will allow the prosumer to fill out the attributes of the service object using its methods.
-
+The information in these files allows the prosumer to fill out or update the attributes of the service object using its methods.
+This is similar to web [application programming interfaces (API)](https://en.wikipedia.org/wiki/Web_API).
