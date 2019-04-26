@@ -1,4 +1,4 @@
-# The developers guide to arrowhead
+# The Arrowhead Framework quick reference
 
 ## Introduction
 The Arrowhead Framework is an embodiment of the [Industry 4.0](https://en.wikipedia.org/wiki/Industry_4.0) concepts and its associated modeled reference architecture ([RAMI 4.0](https://ec.europa.eu/futurium/en/system/files/ged/a2-schweichhart-reference_architectural_model_industrie_4.0_rami_4.0.pdf)).
@@ -47,21 +47,46 @@ The picture below shows the different core systems.
 
 
 ##  Authorization
-The purpose of the Authorization System is to:  
+The Authorization System handles *authorization* and *authentication* within the Local Cloud.
 
-* Provide AuthorizationControl Service (both intra- and inter-Cloud)
-* Provide a TokenGeneration Service for allowing session control within the Local Cloud
-
-This core system holds a database that describes which Application System that are allowed to consume certain services in the local cloud (intra-Cloud access rules), but also which other Local Clouds that  are allowed to consume Services from this local cloud (inter-Cloud authorization rules). Examples of how this access is granted is provided below.
+**Authorization**  
+The Authorization core system provides an AuthorizationControl Service (both intra- and inter-Cloud), controlling what Consumers that are allowed to consume services from what Producers. It holds a database that describes which Application System that are allowed to consume certain services in the local cloud (intra-Cloud access rules), but also which other Local Clouds that  are allowed to consume Services from this local cloud (inter-Cloud authorization rules). Examples of this access control is shown in Figure X.
 
 **PICTURE OF INTRA-CLOUD AUTH TABLE/RELATIONS HERE...**
 
-The Authorization system is also in charge of the authentication of Systems in the local cloud. Authentication is achieved using X.509 certificates, and the Authorization system stores all X.509 certificate PublicKeys for every System in the Cloud. Authentication between Systems in the local cloud is facilitated by having the systems  passing session tokens between them that they have received from the Authorization System. Each system can then verify the identity of another party by validating the token using the to-be-authenticated party's public key. An example of this authentication and validation procedure is found below.
+** Authentication
+* A TokenGeneration Service for allowing session control within the Local Cloud, where the token is used for authentication between Consumers and Producers
+
+The Authorization system is also in charge of the authentication of Systems in the local cloud. Authentication is achieved using [X.509 Certificates](https://en.wikipedia.org/wiki/X.509) and session tokens. The Authorization core system stores all X.509 certificate PublicKeys for every System in the Cloud. Within Local Clouds, each System must have its own certificate, that is signed by their own Cloud certificate. This signature ensures that a System ”belongs” to the Cloud and is properly initiated (bootstrapped into the Cloud). The cloud certificate in its turn needs be signed by a Master Certificate obtained from a [Certificate Authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). Currently the Master Certificate is self-signed, but in the future this will be issued by an Arrowhead CA. The chain of trust in a local cloud is pictured in Figure X.
+
+**PICTURE OF THE AH CHAIN OF TRUST HERE**
+
+A system within the Local Cloud authenticates another system by verifying that system's session token and its signature. In order to obtain a session token from the Authorization system, two things are needed:  
+
+* The System must have its certificate's public key serialized in [Base 64 encoding](https://en.wikipedia.org/wiki/Base64) registered in the Authorization core system database.
+* All Application Systems that are registered in the Authorization database has its X.509 certificate public key (serialized in Base64 encoding) in the “authentication_info” field. This enables for the token generation. 
+
+An example of this authentication and validation procedure is found below.
 
 **PICTURE OF TOKEN GENERATION, PASSING AND VALIDATION HERE...**
 
+Identity verification and admission control utilizes the Common Name (CN) field of the subject name in the X.509 certificate. The current (test) certificates use RSA 2048 bits and are stored in Java KeyStore files. An Arrowhead-compliant CN is structured the following way, separated by dots (”.”):
 
-### Produced services
+``` CN= <systemName>.<cloudName>.<operatorName>.arrowhead.eu ```  
+
+For example:  
+
+``` 
+CN= Orchestrator.TestCloud1.aitia.arrowhead.eu
+OU=SGA				O=AITIA INC.
+L= Budapest			ST=HU
+C=HU				E= hegeduscs@aitia.ai  
+```
+
+Note that the CN field is not case sensitive! 
+
+
+### Authorization Core System Produced services
 The Authorization System offers two Core Services:  
 
 * AuthorizationControl <-- **MAKE LINK TO AUTHIRAZTION SERVICES HERE...**
@@ -69,4 +94,4 @@ The Authorization System offers two Core Services:
 
 The purpose of the *TokenGeneration* functionality is to create session control functionality through the Core Systems. The output is an ArrowheadToken that validates the Service Consumer system when it will try to access the Service from another Application System (Service Provider). This Token shall be primarily generated during the orchestration process and only released to the Service Consumer when all affected Core Systems are notified and agreed to the to-be-established Service connection. 
 
-This System (in line with all core Systems) utilizes the X.509 certificate Common Name naming convention in order to work. This means that the CN is structured as it is described in the generic G4.0 System-of-System Design Document (SoSDD). 
+This System (in line with all core Systems) utilizes the X.509 certificate Common Name naming convention in order to work. This means that the CN is structured as it is described in the generic G4.0 System-of-System Design Document (SoSDD). <<-- REPLACE THIS WITH INFO FROM THIS DOCUMENT (Or a link to an Markdown file)!
