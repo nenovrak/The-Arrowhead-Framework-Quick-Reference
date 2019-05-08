@@ -55,18 +55,31 @@ The Authorization core system provides an AuthorizationControl Service (both int
 **PICTURE OF INTRA-CLOUD AUTH TABLE/RELATIONS HERE...**
 
 ** Authentication
-* A TokenGeneration Service for allowing session control within the Local Cloud, where the token is used for authentication between Consumers and Producers
+The Authorization system is also in charge of the authentication of Systems in the local cloud. Authentication is achieved using [X.509 Certificates](https://en.wikipedia.org/wiki/X.509) and session tokens. The Authorization core system stores all X.509 certificate PublicKeys for every System in the Cloud. Within Local Clouds, each System must have its own certificate, that is signed by that Local Cloud's  certificate. This signature ensures that a System ”belongs” to the Cloud and is properly initiated (bootstrapped into the Cloud). The cloud certificate in its turn needs be signed by a Master Certificate obtained from a [Certificate Authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). Currently the Master Certificate is self-signed, but in the future this will be issued by an Arrowhead CA. The chain of trust in a local cloud is pictured in Figure X. 
+To make a secure cloud in the Java implementation of the Arrowhead framework you must do the following:
 
-The Authorization system is also in charge of the authentication of Systems in the local cloud. Authentication is achieved using [X.509 Certificates](https://en.wikipedia.org/wiki/X.509) and session tokens. The Authorization core system stores all X.509 certificate PublicKeys for every System in the Cloud. Within Local Clouds, each System must have its own certificate, that is signed by their own Cloud certificate. This signature ensures that a System ”belongs” to the Cloud and is properly initiated (bootstrapped into the Cloud). The cloud certificate in its turn needs be signed by a Master Certificate obtained from a [Certificate Authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). Currently the Master Certificate is self-signed, but in the future this will be issued by an Arrowhead CA. The chain of trust in a local cloud is pictured in Figure X.
+1. Use the Arrowhead Master certificate (root certificate) to sign a new certificate for the Local Cloud. The certificate can be found in the keystore "core-java/certificates/Master.p12". The password for this keystore is "123456". To sign a new Local Cloud certificate, you can use [KeyStore explorer](https://keystore-explorer.org/downloads.html). Open the Master.p12 certificate with KeyStore explorer, 
+2. Right-click on the certificate and then choose "sign new key pair" (input the master keystore password again). Select RSA with Key Size: 2,048. 
+3. Choose Version 3, SHA-256 with RSA, set a proper validity period (e.g. 10 years), then click on the little address book marked with "@" in the lower right corner.
+4. Input your Common Name as follows: local_cloud_name.organisation.arrowhead.eu (e.g. secureTempCloud.ltu.arrowhead.eu)
+5. Input the other information about your certificate
+6. Now you go ahead and generate the new key pair. Accept the New Key Pair Alias suggested by KeyStore explorer (e.g. secureTempCloud.ltu.arrowhead.eu (arrowhead.eu)
+7. Choose a password for your new key pair.
+8. Now drag-drop your newly created certificate to a new tab. Then go to this tab and choose "Save as" and save it as a .p12 file.
+9. Now go back to the master.p12 keystore. This keystore should not have your local cloud certificate in it since its only purpose is to be the root certificate for the Arrowhead framework. Therefore you must now remove your certificate from this. Do this by navigating back to this tab and right-click on you certificate and choose "delete". Then choose save to put the master.p12 in its original form.
+
+In order to create a certificate for a System in the Local Cloud you repeat the exact same process as above but using the Local Cloud certificate you just created to sign the System certificate. (Repeat the steps but replace the Master.p12 with your Local Cloud certificate).
+
+Note that you need to update the configuration files of all systems to have their trust-stores point to the Local Cloud certificate.
 
 **PICTURE OF THE AH CHAIN OF TRUST HERE**
 
 A system within the Local Cloud authenticates another system by verifying that system's session token and its signature. In order to obtain a session token from the Authorization system, two things are needed:  
 
 * The System must have its certificate's public key serialized in [Base 64 encoding](https://en.wikipedia.org/wiki/Base64) registered in the Authorization core system database.
-* All Application Systems that are registered in the Authorization database has its X.509 certificate public key (serialized in Base64 encoding) in the “authentication_info” field. This enables for the token generation. 
+* The System must have its X.509 certificate public key (serialized in Base64 encoding) in the “authentication_info” field.
 
-An example of this authentication and validation procedure is found below.
+An example of the Arrowhead authentication and validation procedure is found below.
 
 **PICTURE OF TOKEN GENERATION, PASSING AND VALIDATION HERE...**
 
