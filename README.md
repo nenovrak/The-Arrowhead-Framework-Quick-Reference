@@ -56,22 +56,25 @@ The Authorization core system provides an AuthorizationControl Service (both int
 
 ** Authentication
 The Authorization system is also in charge of the authentication of Systems in the local cloud. Authentication is achieved using [X.509 Certificates](https://en.wikipedia.org/wiki/X.509) and session tokens. The Authorization core system stores all X.509 certificate PublicKeys for every System in the Cloud. Within Local Clouds, each System must have its own certificate, that is signed by that Local Cloud's  certificate. This signature ensures that a System ”belongs” to the Cloud and is properly initiated (bootstrapped into the Cloud). The cloud certificate in its turn needs be signed by a Master Certificate obtained from a [Certificate Authority (CA)](https://en.wikipedia.org/wiki/Certificate_authority). Currently the Master Certificate is self-signed, but in the future this will be issued by an Arrowhead CA. The chain of trust in a local cloud is pictured in Figure X. 
-To make a secure cloud in the Java implementation of the Arrowhead framework you must do the following:
 
-1. Use the Arrowhead Master certificate (root certificate) to sign a new certificate for the Local Cloud. The certificate can be found in the keystore "core-java/certificates/Master.p12". The password for this keystore is "123456". To sign a new Local Cloud certificate, you can use [KeyStore explorer](https://keystore-explorer.org/downloads.html). Open the Master.p12 certificate with KeyStore explorer, 
-2. Right-click on the certificate and then choose "sign new key pair" (input the master keystore password again). Select RSA with Key Size: 2,048. 
-3. Choose Version 3, SHA-256 with RSA, set a proper validity period (e.g. 10 years), then click on the little address book marked with "@" in the lower right corner.
-4. Input your Common Name as follows: local_cloud_name.organisation.arrowhead.eu (e.g. secureTempCloud.ltu.arrowhead.eu)
-5. Input the other information about your certificate
-6. Now you go ahead and generate the new key pair. Accept the New Key Pair Alias suggested by KeyStore explorer (e.g. secureTempCloud.ltu.arrowhead.eu (arrowhead.eu)
-7. Choose a password for your new key pair.
-8. Now drag-drop your newly created certificate to a new tab. Then go to this tab and choose "Save as" and save it as a .p12 file.
-9. Now go back to the master.p12 keystore. This keystore should not have your local cloud certificate in it since its only purpose is to be the root certificate for the Arrowhead framework. Therefore you must now remove your certificate from this. Do this by navigating back to this tab and right-click on you certificate and choose "delete". Then choose save to put the master.p12 in its original form.
+In the Java implementation of the Arrowhead framework this is **probably** how the different certificates fit into the Java keystore and truststore principles. Note that in Java the keystore is used for sending certificates to authorize oneself, while the truststore holds certificates you trust and is used when you receive certificates from another party that you want to authenticate.
 
-In order to create a certificate for a System in the Local Cloud you repeat the exact same process as above but using the Local Cloud certificate you just created to sign the System certificate. (Repeat the steps but replace the Master.p12 with your Local Cloud certificate).
+When a Provider starts in secure mode, it contacts the Orchestrator to register its services (just like in insecure mode).  In secure mode, however, it will open its keystore, take its certificate and send this to the Orchestrator along with the request to register. The Orchestrator when it receives the certificate will follow the certificate chain of this certificate (system certificate --> local cloud certificate --> Arrowhead master). The provided certificate should be signed by the local cloud certificate which in its turn is signed by the global (master) certificate. The Orchestrator will use its truststore where, as the name implies, trusted certificates are stored. In the truststore, the Orchestrator needs to have the local cloud certificate and the Arrowhead master certificate. Then these can be used to verify that the system certificate is authentic and thus the system is who it claims to be.
 
-Note that you need to update the configuration files of all systems to have their trust-stores point to the Local Cloud certificate.
+The same procedure happens when a Consumer contacts the Orchestrator in secure mode, but then the provided certificate is of course the Consumer's certificate which is signed by the local cloud certificate which is signed by the master certificate.
 
+To make a secure cloud in the Java implementation of the Arrowhead framework, the following steps are needed:
+
+1. Create a Local Cloud Certificate that is signed by the Arrowhead Master certificate (root certificate). The Arrowhead master certificate can be found in the keystore "core-java/certificates/Master.p12". The password for this keystore is "123456".
+2. Create System certificates for each of the systems in the Local Cloud (including one for each core service), and use the Local Cloud certificate to sign each of these. 
+3. Update the keystores of each of the _core systems_ to have the full certificate chain (system certificate --> Local Cloud certificate --> Arrowhead master certificate). A core system will send all these certificates to a connecting system in order for that system to be able to verify the core system's identity.
+4. Update the truststore of each of the _core systems_ to include the Local Cloud certificate and the Arrowhead Master. When a system connects to the core service, it will use the truststore to verify the certificate of the connecting system.
+5. Update the keystores of each of your desired Local Cloud systems (non core systems) to include that system's certificate. This will be used when the system connects to the core systems in order to verify its identity.
+6. Update the keystores of each of your desired Local Cloud systems (non core systems) to include the Local Cloud certificate and the Arrowhead Master certificate. This will be used when the system is verifying the identity of a core system (by verifying the certificate chain that is sent from the core system's keystore).
+
+Note also that you need to update the config of each system to point to the correct truststores and keystores and having the correct passwords to these.
+
+A detailed description of how to do this using Keytool explorer can be found [here](signing_arrowhead_certificates_with_keystore_explorer.md) 
 **PICTURE OF THE AH CHAIN OF TRUST HERE**
 
 A system within the Local Cloud authenticates another system by verifying that system's session token and its signature. In order to obtain a session token from the Authorization system, two things are needed:  
