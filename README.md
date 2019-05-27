@@ -21,11 +21,24 @@ Moreover, the Arrowhead Framework promotes interoperability, both at the protoco
 
 ## The Local Cloud and other Arrowhead entities <a name="localCloud"></a>
 The whole Industry 4.0 concept is based on the use of the Internet as a means to interconnect assets (i.e., sensors, actuators, databases, and human machine interfaces).
-The challenge is to correct assets the correct assets with full cybersecurity at run time.
-Each framework has attempted to provide an answer to this.
+**The challenge is to interconnect assets the correct or appropriate corresponding assets with full cybersecurity at run time.**
+Each IoT framework has attempted to provide an answer to this.
+
+The Arrowhead Framework does this secured interconnection at runtime (versus design time) in a manageable, and yet scalable, manner through the idea of local cloud.
+The local cloud promotes security and low latency while being an independent functional unit.
+Scalability is further enhanced with inter cloud interdependence to form systems of systems.
+
+One forms a local cloud with [service prosumers](definitions/sProsumer.md), i.e., cohesive software programs that exchange services.
+**Any of the local cloud's service prosumers can then ask at run time: "where can I find the service that I need and that I am authorized to use?"**
+This is possible because the Arrowhead Framework puts forth mandatory and support core prosumers.
+The mandatory core prosumers include the Service Registry, the Orchestrator and Authorization service prosumers.
+The Service Registry keeps track of all currently available services of the local cloud.
+The Authorization prosumers keeps track of which service can be exchanged between two specific service prosumers.
+The Orchestrator provides the appropriate connection address of currently available services (via the Service Registry) that are authorized (via the Authorization prosumer).
+
 
 The Arrowhead Framework borrows on the concept of service oriented architecture where assets offer [services](definitions/service.md) to each other. It expands it to the local cloud where a limited set of assets interact with each other. 
-As per the Arrowhead approach, a [Service](definitions/service.md) Oriented Architecture (SOA) is established in order to provide interoperability by facilitating the service interactions within closed or at least separated automation environments, called local clouds.
+As per the Arrowhead approach, a Service Oriented Architecture (SOA) is established in order to provide interoperability by facilitating the service interactions within closed or at least separated automation environments, called local clouds.
 
 Arrowhead Local Clouds can fulfill various tasks, and can have their own sets of appointed stakeholders (e.g., their operators or developers). These Local Clouds all have their operational boundaries, let those be functional, geographical or network-segmented. Nevertheless, each local cloud is governed through their own instances of the Arrowhead Core Systems. These are clouds in the sense that they use common resources: the Core Systems of that domain. In Arrowhead Local Clouds there can be an arbitrary number of Systems that can provide and consume Services from one another: they create and finish servicing instances dynamically in run-time.
 
