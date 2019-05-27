@@ -1,7 +1,7 @@
 Service Prosumer
 ====
 
-A service prosumer is an Arrowhead Framework compliant [RAMI 4.0 administrative shell](../figs/shells.jpg) over an asset.
+A service prosumer is an Arrowhead Framework compliant [RAMI 4.0 administrative shell](/figs/shells.jpg) over an asset.
 
 An asset can be:
 - a sensor, e.g., a temperature sensor, a pressure sensor, or a complete weather station.
@@ -10,6 +10,8 @@ An asset can be:
 - a database, e.g., a service registry or a data manager.
 - a human machine interface, e.g., an app on a smart phone.
 - another IoT Framework, e.g., [Fiware](https://www.fiware.org).
+- an [AI](https://en.wikipedia.org/wiki/Artificial_intelligence) engine.
+- an analytics engine.
 
 The service prosumer is a software program and is the basic building block of the Arrowhead Framework.
 It has been traditionally been called a [*system*](system.md), which has been confusing to some new comers.
@@ -28,6 +30,7 @@ One can divide a service prosumer in seven slices [^slices] that interact withe 
 7. The scheduler: this is the (main) slice that starts up the registry of services, keeps track scheduled events, such as reading a temperature sensor every 0.1 second, or renewing authorization tokens when they are about to expire. In other words, the prosumer responds to service requests made to the server of slice 1 or to scheduled events of slice 7.
 
 A service prosumer inherits its structure from the Prosumer class and is further composed with specific services and asset interface. 
-In the inheritance it gets service objects such as safety, reregister, reorchestrate, shutdown.
+Through inheritance, it gets service objects such as safety, (re)register, (re)orchestrate, shutdown.
+For each asset, new specific service objects class have to be derived, which polymorphism allow smooth operation.
 
 [^slices]: Slices are vertical layers since there interactions are described in UML Sequence Diagrams.
